@@ -1,1 +1,1 @@
-export const echo = () => console.log('hello');
+export const echo = () => console.log('hello world');
