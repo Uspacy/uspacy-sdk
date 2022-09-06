@@ -1,0 +1,32 @@
+name: Check version
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [17.x]
+
+    steps:
+      - uses: actions/checkout@main
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@main
+      - name: Get package info
+        id: package
+        uses: codex-team/action-nodejs-package-info@v1
+
+      - name: Get latest version
+        run: |
+          echo ::set-output name=value::$(npm show ${{steps.package.outputs.name}} version)
+        id: latest_version
+
+      - name: Check version
+        if: steps.latest_version.outputs.value == steps.package.outputs.version
+        run: |
+          echo "Need to change package version"
+          exit 1

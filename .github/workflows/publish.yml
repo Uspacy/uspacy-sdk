@@ -1,4 +1,8 @@
-on: push
+name: Publish
+
+on:
+  push:
+    branches: [ main ]
 
 jobs:
   publish:
