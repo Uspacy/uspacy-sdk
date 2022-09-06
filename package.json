@@ -1,0 +1,52 @@
+{
+  "name": "@uspacy/sdk",
+  "version": "0.0.1-alpha.1",
+  "description": "",
+  "repository": "git@github.com:Uspacy/uspacy-sdk.git",
+  "dependencies": {
+    "axios": "0.27.2",
+    "date-fns": "2.29.2",
+    "js-cookie": "3.0.1",
+    "retry-my-fetch": "1.4.1"
+  },
+  "devDependencies": {
+    "@types/jest": "27.4.1",
+    "@types/js-cookie": "3.0.2",
+    "@types/node": "17.0.31",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.11.0",
+    "cross-env": "7.0.3",
+    "eslint": "^8.14.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-config-react-app": "7.0.0",
+    "eslint-import-resolver-alias": "1.1.2",
+    "eslint-import-resolver-typescript": "2.5.0",
+    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-simple-import-sort": "7.0.0",
+    "pre-commit": "1.2.2",
+    "prettier": "2.6.2",
+    "typescript": "4.6.4"
+  },
+  "scripts": {
+    "prebuild": "rimraf lib",
+    "build": "tsc",
+    "test": "jest",
+    "test:ci": "cross-env CI=true npm run test",
+    "lint": "eslint -c .eslintrc.js --ext .ts,.tsx src/ --max-warnings=0"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
