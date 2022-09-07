@@ -24,4 +24,5 @@
     "strictNullChecks": false
   },
   "include": ["src"],
+  "exclude": ["src/demo/*"]
 }

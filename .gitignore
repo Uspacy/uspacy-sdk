@@ -25,3 +25,7 @@ yarn-error.log*
 yarn.lock
 .vscode/
 lib
+.env
+.config
+.parcel-cache
+dist

@@ -30,3 +30,8 @@ public
 .gitignore
 .editorconfig
 tsconfig.json
+.env
+config
+.github
+dist
+.parcel-cache
