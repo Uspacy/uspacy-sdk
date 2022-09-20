@@ -2,7 +2,7 @@ import addDays from 'date-fns/addDays';
 import addSeconds from 'date-fns/addSeconds';
 import cookie from 'js-cookie';
 
-import { APP_PREFIX } from '../consts';
+import { APP_PREFIX } from './consts';
 
 const TOKEN_KEY = `${APP_PREFIX}.token`;
 const REFRESH_TOKEN_KEY = `${APP_PREFIX}.refreshToken`;
