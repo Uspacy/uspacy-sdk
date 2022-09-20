@@ -1,15 +1,11 @@
 {
   "name": "@uspacy/sdk",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1-alpha.5",
   "description": "Uspacy javascript sdk",
   "repository": "git@github.com:Uspacy/uspacy-sdk.git",
   "main": "./lib/index.js",
   "dependencies": {
-    "axios": "0.27.2",
-    "date-fns": "2.29.2",
-    "dotenv": "^16.0.2",
-    "js-cookie": "3.0.1",
-    "retry-my-fetch": "1.4.1"
+    "axios": "0.27.2"
   },
   "devDependencies": {
     "@types/jest": "27.4.1",
@@ -36,7 +32,9 @@
     "ts-node": "^10.9.1",
     "typescript": "4.6.4",
     "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0"
+    "webpack-cli": "^4.10.0",
+    "date-fns": "2.29.2",
+    "js-cookie": "3.0.1"
   },
   "scripts": {
     "start:dev": "parcel src/demo/index.html",

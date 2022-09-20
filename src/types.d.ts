@@ -1,5 +1,6 @@
 
 import { ConfigHttpClient } from './helpers/httpClient';
+import { AuthInstance } from './services/Auth';
 import { UsersInstance } from './services/Users';
 
 export interface UspacyConfig {
@@ -10,4 +11,5 @@ export interface UspacyConfig {
 export interface UspacyInstance {
 	httpClient: AxiosInstance;
 	users: UsersInstance;
+	auth: AuthInstance;
 }

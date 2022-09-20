@@ -1,4 +1,4 @@
-import { APP_PREFIX } from '../consts';
+import { APP_PREFIX } from './consts';
 
 interface ILocalStorage {
 	getItem<T>(key: string): T | string | undefined;
