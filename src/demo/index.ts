@@ -11,17 +11,15 @@ const start = async () => {
 	const { httpClient } = uspacyClient;
 	httpClient.interceptors.request.use((res) => {
 		const token = getToken();
-		if (token) res.headers['Authorization'] = `Bearer ${token}`;
+		if (token && res.headers) res.headers['Authorization'] = `Bearer ${token}`;
 		return res;
 	});
 	httpClient.interceptors.response.use(
 		(response) => {
-			if (response.config.url.includes('/auth/login')) {
+			if (response.config.url?.includes('/auth/signIn')) {
 				setToken(response.data.jwt);
-				if (response.config.params.remember) {
-					setRemember();
-					setRefreshToken(response.data.refreshToken);
-				}
+				setRemember();
+				setRefreshToken(response.data.refreshToken);
 			}
 			return response;
 		},
@@ -30,13 +28,11 @@ const start = async () => {
 				const originalRequest = error.config;
 				if (error.response.status === 401 && !originalRequest._retry && !originalRequest.url.includes('auth/refreshToken')) {
 					if (!hasRemember()) throw new Error('logout');
-					originalRequest._retry = true;
+					console.log(111);
 					const refreshToken = getRefreshToken();
-					const newToken = await httpClient.post('/api/auth/refreshToken', null, {
-						headers: {
-							...(refreshToken && {Authorization: `Bearer ${refreshToken}`}),
-						},
-					});
+					if (!refreshToken) throw new Error('logout');
+					originalRequest._retry = true;
+					const newToken = await uspacyClient.auth.refreshToken(refreshToken);
 					originalRequest.headers['Authorization'] = `Bearer ${newToken.data.jwt}`;
 					return httpClient(originalRequest);
 				}
@@ -46,8 +42,18 @@ const start = async () => {
 			}
 		}
 	);
+	const token = getToken();
 	await uspacyClient.auth.login('root@gmail.com', '123456');
-	// await uspacyClient.users.list(2, 3);
+	console.log(token);
+	// fetch('https://stage.uspacy.com.ua/company/v1/users/', {
+	// 	method: 'GET',
+	// 	headers: {
+	// 		Accept: 'application/json',
+	// 		'Content-Type': 'application/json',
+	// 		Authorization: `Bearer ${token}`,
+	// 	},
+	// }).catch((err) => console.log(err));
+	// await uspacyClient.users.list(1, 3);
 	// setToken(res3.data.jwt);
 	// setRefreshToken(res3.data.refreshToken);
 	// const res = await uspacyClient.users.list();
