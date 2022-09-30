@@ -24,6 +24,15 @@ export class Users {
 			},
 		});
 	}
+
+	/**
+	 * Get user by id
+	 * @param id user id
+	 * @returns user entity
+	 */
+	getById(id: number) {
+		return this.httpClient.get<User>(`${this.namespace}/users/${id}/`);
+	}
 }
 
 export enum UserRole {
