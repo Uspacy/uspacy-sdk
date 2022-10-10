@@ -1,10 +1,10 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance } from 'axios';
 
 /**
  * Departments service
  */
 export class Departments {
-	private namespace = "company/v1/departments";
+	private namespace = 'company/v1/departments';
 
 	private routeAceessName = {
 		depServiceBaseURL: `${this.namespace}`,
@@ -14,9 +14,11 @@ export class Departments {
 			name: string,
 			headId: string,
 			parentDepartmentId: string,
-			userIds: string
+			userIds: string,
 		): string =>
-			`${this.routeAceessName.depServiceBaseURL}/?page=${page}&list=${list}&filter[name]=${name}&filter[headId]=${headId}&filter[parentDepartmentId]=${parentDepartmentId}&filter[usersIds]=${userIds}`,
+			`${this.routeAceessName.depServiceBaseURL}
+			/?page=${page}&list=${list}&filter[name]=${name}&filter[headId]=${headId}&filter[parentDepartmentId]=
+			${parentDepartmentId}&filter[usersIds]=${userIds}`,
 		createDepartmentURL: (): string =>
 			`${this.routeAceessName.depServiceBaseURL}`,
 		getDepartmentByIdURL: (depID: number): string =>
@@ -48,7 +50,7 @@ export class Departments {
 		name: string,
 		headId: string,
 		parentDepartmentId: string,
-		userIds: string
+		userIds: string,
 	) {
 		return this.httpClient.get<Department>(
 			`${this.routeAceessName.getDepartmentsURL(
@@ -57,8 +59,8 @@ export class Departments {
 				name,
 				headId,
 				parentDepartmentId,
-				userIds
-			)}` // 200 OK
+				userIds,
+			)}`, // 200 OK
 		);
 	}
 
@@ -73,7 +75,7 @@ export class Departments {
 				name,
 				description,
 				headId,
-			}
+			},
 		);
 	}
 
@@ -84,7 +86,7 @@ export class Departments {
 	 */
 	getDepartmentById(depID: number) {
 		return this.httpClient.get<Department>(
-			`${this.routeAceessName.getDepartmentByIdURL(depID)}`
+			`${this.routeAceessName.getDepartmentByIdURL(depID)}`,
 		);
 	}
 
@@ -102,7 +104,7 @@ export class Departments {
 		name: string,
 		headId: string,
 		parentDepartmentId: string,
-		usersIds: string
+		usersIds: string,
 	) {
 		return this.httpClient.patch<DepartmentPatch>(
 			`${this.routeAceessName.updateDepartmentURL(depID)}`,
@@ -111,7 +113,7 @@ export class Departments {
 				headId,
 				parentDepartmentId,
 				usersIds,
-			}
+			},
 		);
 	}
 
@@ -122,7 +124,7 @@ export class Departments {
 	 */
 	deleteDepartment(depID: number) {
 		return this.httpClient.delete<DepartmentPatch>(
-			`${this.routeAceessName.deleteDepartmentURL(depID)}`
+			`${this.routeAceessName.deleteDepartmentURL(depID)}`,
 		);
 	}
 }

@@ -1,11 +1,10 @@
-import { AxiosInstance } from "axios";
-import { type } from "os";
+import { AxiosInstance } from 'axios';
 
 /**
  * Users service
  */
 export class Users {
-	private namespace = "/company/v1";
+	private namespace = '/company/v1';
 
 	private routeAceessName = {
 		usersServiceBaseURL: `${this.namespace}/users`,
@@ -34,7 +33,7 @@ export class Users {
 		searchURL: (
 			email: string,
 			firstName: string,
-			lastName: string
+			lastName: string,
 		): string =>
 			`${this.routeAceessName.getUsersURL()}/search/?email=${email}&firstName=${firstName}&LastName=${lastName}`,
 	};
@@ -58,7 +57,7 @@ export class Users {
 					page,
 					list,
 				},
-			}
+			},
 		);
 	}
 
@@ -69,7 +68,7 @@ export class Users {
 	 */
 	getById(id: number) {
 		return this.httpClient.get<User>(
-			`${this.routeAceessName.userByIDURL(id)}`
+			`${this.routeAceessName.userByIDURL(id)}`,
 		);
 	}
 
@@ -85,7 +84,7 @@ export class Users {
 		email: string,
 		password: string,
 		firstName: string,
-		lastName: string
+		lastName: string,
 	) {
 		return this.httpClient.post<User>(
 			`${this.routeAceessName.getUsersURL()}`,
@@ -94,7 +93,7 @@ export class Users {
 				password,
 				firstName,
 				lastName,
-			}
+			},
 		);
 	}
 
@@ -108,7 +107,7 @@ export class Users {
 	updateUser(id: number, config: updateUser) {
 		return this.httpClient.patch<User>(
 			`${this.routeAceessName.userByIDURL(id)}`,
-			config
+			config,
 		);
 	}
 
@@ -119,7 +118,7 @@ export class Users {
 	 */
 	deactvateUser(id: number) {
 		return this.httpClient.post<User>(
-			`${this.routeAceessName.userDeactivateURL(id)}`
+			`${this.routeAceessName.userDeactivateURL(id)}`,
 		);
 	}
 
@@ -130,7 +129,7 @@ export class Users {
 	 */
 	activateUser(id: number) {
 		return this.httpClient.post<User>(
-			`${this.routeAceessName.userActivateURL(id)}`
+			`${this.routeAceessName.userActivateURL(id)}`,
 		);
 	}
 
@@ -142,7 +141,7 @@ export class Users {
 	updateRoles(id: number, roles: UserRole[]) {
 		return this.httpClient.patch<User>(
 			`${this.routeAceessName.userUpdateRolesURL(id)}`,
-			{ roles }
+			{ roles },
 		);
 	}
 
@@ -157,7 +156,7 @@ export class Users {
 			`${this.routeAceessName.userUpdatePositionURL(id)}`,
 			{
 				position,
-			}
+			},
 		);
 	}
 
@@ -172,7 +171,7 @@ export class Users {
 			`${this.routeAceessName.userUpdatePasswordURL(id)}`,
 			{
 				password,
-			}
+			},
 		);
 	}
 
@@ -182,7 +181,7 @@ export class Users {
 	 */
 	getSelfProfile() {
 		return this.httpClient.get<User>(
-			`${this.routeAceessName.getSelfProfileURL()}`
+			`${this.routeAceessName.getSelfProfileURL()}`,
 		);
 	}
 
@@ -195,7 +194,7 @@ export class Users {
 	updateSelfPassword(
 		password: string,
 		oldPassword: string,
-		newPassword: string
+		newPassword: string,
 	) {
 		return this.httpClient.patch<User>(
 			`${this.routeAceessName.updateSelfPasswordURL()}`,
@@ -203,7 +202,7 @@ export class Users {
 				oldPassword,
 				newPassword,
 				password,
-			}
+			},
 		);
 	}
 
@@ -217,7 +216,7 @@ export class Users {
 			`${this.routeAceessName.forgotPasswordURL()}`,
 			{
 				email,
-			}
+			},
 		);
 	}
 
@@ -235,7 +234,7 @@ export class Users {
 				email,
 				password,
 				token,
-			}
+			},
 		);
 	}
 
@@ -248,15 +247,15 @@ export class Users {
 	 */
 	search(email: string, firstName: string, lastName: string) {
 		return this.httpClient.get<User>(
-			`${this.routeAceessName.searchURL(email, firstName, lastName)}/`
+			`${this.routeAceessName.searchURL(email, firstName, lastName)}/`,
 		);
 	}
 }
 
 export enum UserRole {
-	OWNER = "OWNER",
-	ADMIN = "ADMIN",
-	USER = "USER",
+	OWNER = 'OWNER',
+	ADMIN = 'ADMIN',
+	USER = 'USER',
 }
 /**
  * User entity
@@ -274,7 +273,7 @@ export interface User {
 	aboutMyself: string;
 	phone: {
 		id: string;
-		type: "WORK" | "MOBILE" | "HOME";
+		type: 'WORK' | 'MOBILE' | 'HOME';
 		value: string;
 	}[];
 	active: boolean;
@@ -290,5 +289,5 @@ export interface User {
 	}[];
 }
 
-type updateUser = Omit<User, "id" | "active" | "position" | "roles">;
-type updatePosition = Pick<User, "position">;
+type updateUser = Omit<User, 'id' | 'active' | 'position' | 'roles'>;
+type updatePosition = Pick<User, 'position'>;

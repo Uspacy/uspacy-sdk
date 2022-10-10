@@ -1,10 +1,10 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance } from 'axios';
 
 /**
  * NewsFeed service
  */
 export class NewsFeed {
-	private namespace = "/newsfeed/v1/posts";
+	private namespace = '/newsfeed/v1/posts';
 
 	private routeAceessName = {
 		newsFeedBaseURL: `${this.namespace}`,
@@ -21,7 +21,7 @@ export class NewsFeed {
 			`${this.routeAceessName.deletePostURL(postId)}comments/`,
 		updateCommentURL: (postId: number, commentId: number) =>
 			`${this.routeAceessName.deletePostURL(
-				postId
+				postId,
 			)}comments/${commentId}`,
 	};
 
@@ -38,7 +38,7 @@ export class NewsFeed {
 	 */
 	getPosts(page: number, list: number) {
 		return this.httpClient.get(
-			`${this.routeAceessName.getPostsURL(page, list)}`
+			`${this.routeAceessName.getPostsURL(page, list)}`,
 		);
 	}
 
@@ -52,7 +52,7 @@ export class NewsFeed {
 		title: string,
 		message: string,
 		files?: string[],
-		recipients?: RecipientsPost
+		recipients?: RecipientsPost,
 	) {
 		return this.httpClient.post<Post>(
 			`${this.routeAceessName.createPostURL}`,
@@ -61,7 +61,7 @@ export class NewsFeed {
 				message,
 				files,
 				recipients,
-			}
+			},
 		);
 	}
 
@@ -75,11 +75,11 @@ export class NewsFeed {
 	updatePost(
 		postId: number,
 		postconfig: createPost,
-		recipients: RecipientsPost
+		recipients: RecipientsPost,
 	) {
 		return (
 			this.httpClient.patch<Post>(
-				`${this.routeAceessName.updatePostURL(postId)}`
+				`${this.routeAceessName.updatePostURL(postId)}`,
 			),
 			{
 				postconfig,
@@ -95,7 +95,7 @@ export class NewsFeed {
 	 */
 	deletePost(postId: number) {
 		return this.httpClient.delete<Post>(
-			`${this.routeAceessName.deletePostURL(postId)}`
+			`${this.routeAceessName.deletePostURL(postId)}`,
 		);
 	}
 
@@ -108,7 +108,7 @@ export class NewsFeed {
 	 */
 	getComments(page: number, list: number, postId: number) {
 		return this.httpClient.get<Post>(
-			`${this.routeAceessName.getCommentsURL(page, list, postId)}`
+			`${this.routeAceessName.getCommentsURL(page, list, postId)}`,
 		);
 	}
 
@@ -121,7 +121,7 @@ export class NewsFeed {
 	createComment(postId: number, config: createComment) {
 		return this.httpClient.post<Post>(
 			`${this.routeAceessName.createCommentURL(postId)}`,
-			config
+			config,
 		);
 	}
 
@@ -135,7 +135,7 @@ export class NewsFeed {
 	updateComment(postId: number, commentId: number, config: createComment) {
 		return this.httpClient.patch<Post>(
 			`${this.routeAceessName.updateCommentURL(postId, commentId)}`,
-			{ config }
+			{ config },
 		);
 	}
 
@@ -147,7 +147,7 @@ export class NewsFeed {
 	 */
 	deleteComment(postId: number, commentId: number) {
 		return this.httpClient.delete<Post>(
-			`${this.routeAceessName.updateCommentURL(postId, commentId)}`
+			`${this.routeAceessName.updateCommentURL(postId, commentId)}`,
 		);
 	}
 }
@@ -166,7 +166,7 @@ export interface Post {
 			authorId: string;
 			files?: string[];
 			date: number;
-		}
+		},
 	];
 }
 
@@ -181,8 +181,8 @@ export interface RecipientsPost {
 	};
 }
 
-type createPost = Omit<Post, "id" | "authorId" | "comments" | "date">;
+type createPost = Omit<Post, 'id' | 'authorId' | 'comments' | 'date'>;
 type createComment = Omit<
-	Post,
-	"authorId" | "date" | "title" | "comments" | "id"
+Post,
+'authorId' | 'date' | 'title' | 'comments' | 'id'
 >;

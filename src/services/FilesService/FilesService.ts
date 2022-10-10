@@ -1,16 +1,16 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance } from 'axios';
 
 /**
  * Tasks service
  */
 export class FilesService {
-	private namespace = "files/v1/files";
+	private namespace = 'files/v1/files';
 
 	private routeAceessName = {
 		BaseURL: `${this.namespace}`,
 		getListTheFileInfoURL: (
 			entityType: EntityType[],
-			entityId: number
+			entityId: number,
 		): string =>
 			`${this.routeAceessName}/files?entity_type=${entityType}&entityId=${entityId}/`,
 		showInfoAboutFileURL: (id: number): string =>
@@ -33,8 +33,8 @@ export class FilesService {
 		return this.httpClient.get<FileInfoDto>(
 			`${this.routeAceessName.getListTheFileInfoURL(
 				entityType,
-				entityId
-			)}`
+				entityId,
+			)}`,
 		);
 	}
 
@@ -48,7 +48,7 @@ export class FilesService {
 	uploadOneOrMoreFiles(
 		files: string[],
 		entityType: EntityType,
-		entityId: number
+		entityId: number,
 	) {
 		return this.httpClient.post<FileInfoDto>(
 			`${this.routeAceessName.uploadOneOrMoreFilesURL()}`,
@@ -56,7 +56,7 @@ export class FilesService {
 				files,
 				entityType,
 				entityId,
-			}
+			},
 		);
 	}
 
@@ -67,7 +67,7 @@ export class FilesService {
 	 */
 	showInfoAboutFile(fileId: number) {
 		return this.httpClient.get<FileInfoDto>(
-			`${this.routeAceessName.showInfoAboutFileURL(fileId)}`
+			`${this.routeAceessName.showInfoAboutFileURL(fileId)}`,
 		);
 	}
 
@@ -82,7 +82,7 @@ export class FilesService {
 			`${this.routeAceessName.showInfoAboutFileURL(fileId)}`,
 			{
 				entity_id,
-			}
+			},
 		);
 	}
 
@@ -93,15 +93,15 @@ export class FilesService {
 	 */
 	removeFileAndInfo(fileId: number) {
 		return this.httpClient.delete<FileInfoDto>(
-			`${this.routeAceessName.showInfoAboutFileURL(fileId)}`
+			`${this.routeAceessName.showInfoAboutFileURL(fileId)}`,
 		);
 	}
 }
 
 export enum EntityType {
-	comment = "comment",
-	post = "post",
-	task = "task",
+	comment = 'comment',
+	post = 'post',
+	task = 'task',
 }
 
 export interface FileInfoDto {

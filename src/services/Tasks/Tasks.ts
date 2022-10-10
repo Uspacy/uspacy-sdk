@@ -1,12 +1,12 @@
-import { AxiosInstance } from "axios";
-const isAvailibleParams = (params: any) => {
-	let query_params = "?";
+import { AxiosInstance } from 'axios';
+const isAvailibleParams = (params: AvalibleTask) => {
+	let query_params = '?';
 	let counter = 0;
-	for (let query in params) {
+	for (const query in params) {
 		counter++;
 		const current_query_params = params[query];
 		query_params += `${
-			counter > 1 ? "&" : ""
+			counter > 1 ? '&' : ''
 		}${query}=${current_query_params}`;
 	}
 	return query_params;
@@ -15,11 +15,11 @@ const isAvailibleParams = (params: any) => {
  * Tasks service
  */
 export class Tasks {
-	private namespace = "tasks/v1/";
+	private namespace = 'tasks/v1/';
 
 	private routeAceessName = {
 		BaseURL: `${this.namespace}`,
-		getAvailableTasksURL: (params: any): string =>
+		getAvailableTasksURL: (params: AvalibleTask): string =>
 			`${this.routeAceessName.BaseURL}tasks/${isAvailibleParams(params)}`,
 		createTaskURL: `${this.namespace}tasks/`,
 		getTaskByIdURL: (taskID: string): string =>
@@ -28,9 +28,10 @@ export class Tasks {
 			`${this.routeAceessName.BaseURL}tasks/${taskID}/`,
 		denialATaskURL: (taskID: string): string =>
 			`${this.routeAceessName.editTaskByIdURL(taskID)}denial/`,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		getCommentsURL: (taskID: string, params: any): string => {
 			return `${this.routeAceessName.editTaskByIdURL(
-				taskID
+				taskID,
 			)}${isAvailibleParams(params)}`;
 		},
 		createCommentURL: (taskID: string): string =>
@@ -46,16 +47,16 @@ export class Tasks {
 			`${this.routeAceessName.getTaskByIdURL(taskId)}checkList/`,
 		updateCheckListURL: (taskId: string, checkListId: string): string =>
 			`${this.routeAceessName.getCommentsByTaskIdURL(
-				taskId
+				taskId,
 			)}${checkListId}/`,
 		getItemsCheckByIdURL: (checkListId: string): string =>
 			`${this.routeAceessName.BaseURL}/checklist/${checkListId}`,
 		deleteItemToCheckListByIdURL: (
 			checkListId: string,
-			checkListItemId: string
+			checkListItemId: string,
 		): string =>
 			`${this.routeAceessName.getItemsCheckByIdURL(
-				checkListId
+				checkListId,
 			)}/${checkListItemId}`,
 		bulkEditionCompleteTasksURL: (): string =>
 			`${this.routeAceessName.createTaskURL}/massEdit/complete`,
@@ -79,9 +80,9 @@ export class Tasks {
 	 * @param order_by sorting direction
 	 * @returns available tasks list
 	 */
-	getAvailableTasks(params: any) {
+	getAvailableTasks(params: AvalibleTask) {
 		return this.httpClient.get<Task>(
-			`${this.routeAceessName.getAvailableTasksURL(params)}`
+			`${this.routeAceessName.getAvailableTasksURL(params)}`,
 		);
 	}
 
@@ -93,7 +94,7 @@ export class Tasks {
 	createTask(config: createTask) {
 		return this.httpClient.post<Task>(
 			`${this.routeAceessName.createTaskURL}`,
-			config
+			config,
 		);
 	}
 
@@ -104,7 +105,7 @@ export class Tasks {
 	 */
 	getTaskById(taskId: string) {
 		return this.httpClient.get<Task>(
-			`${this.routeAceessName.getTaskByIdURL(taskId)}`
+			`${this.routeAceessName.getTaskByIdURL(taskId)}`,
 		);
 	}
 
@@ -117,7 +118,7 @@ export class Tasks {
 	editTaskById(taskId: string, config: updateTask) {
 		return this.httpClient.patch<Task>(
 			`${this.routeAceessName.editTaskByIdURL(taskId)}`,
-			config
+			config,
 		);
 	}
 
@@ -128,7 +129,7 @@ export class Tasks {
 	 */
 	deleteTaskById(taskId: string) {
 		return this.httpClient.delete<Task>(
-			`${this.routeAceessName.editTaskByIdURL(taskId)}`
+			`${this.routeAceessName.editTaskByIdURL(taskId)}`,
 		);
 	}
 
@@ -141,7 +142,7 @@ export class Tasks {
 	denialATask(taskId: string, reason: string) {
 		return this.httpClient.post<Task>(
 			`${this.routeAceessName.denialATaskURL(taskId)}`,
-			reason
+			reason,
 		);
 	}
 
@@ -152,9 +153,10 @@ export class Tasks {
 	 * @param list how many items should be per page
 	 * @returns
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	getCommentsById(taskId: string, params: any) {
 		return this.httpClient.get<Comments>(
-			`${this.routeAceessName.getCommentsURL(taskId, params)}`
+			`${this.routeAceessName.getCommentsURL(taskId, params)}`,
 		);
 	}
 
@@ -170,11 +172,11 @@ export class Tasks {
 		taskId: string,
 		message: string,
 		files: string[],
-		denial: boolean
+		denial: boolean,
 	) {
 		return this.httpClient.post<Comments>(
 			`${this.routeAceessName.createCommentURL(taskId)}`,
-			{ message, files, denial }
+			{ message, files, denial },
 		);
 	}
 
@@ -186,7 +188,7 @@ export class Tasks {
 	 */
 	deleteComment(taskId: string, commentId: string) {
 		return this.httpClient.delete(
-			`${this.routeAceessName.deleteCommentURL(taskId, commentId)}`
+			`${this.routeAceessName.deleteCommentURL(taskId, commentId)}`,
 		);
 	}
 
@@ -201,7 +203,7 @@ export class Tasks {
 		commentId: string,
 		message: string,
 		files: string[],
-		denial: boolean
+		denial: boolean,
 	) {
 		return this.httpClient.patch(
 			`${this.routeAceessName.deleteCommentURL(taskId, commentId)}`,
@@ -209,7 +211,7 @@ export class Tasks {
 				message,
 				files,
 				denial,
-			}
+			},
 		);
 	}
 
@@ -219,7 +221,7 @@ export class Tasks {
 	 */
 	getCanbanStages() {
 		return this.httpClient.get<CanbanStage>(
-			`${this.routeAceessName.getCanbanStagesURL}`
+			`${this.routeAceessName.getCanbanStagesURL}`,
 		);
 	}
 
@@ -237,7 +239,7 @@ export class Tasks {
 				title,
 				color,
 				afterId,
-			}
+			},
 		);
 	}
 
@@ -248,7 +250,7 @@ export class Tasks {
 	 */
 	getCanbanStageById(stageId: string) {
 		return this.httpClient.get<CanbanStage>(
-			`${this.routeAceessName.getCanbanStageByIdURL(stageId)}`
+			`${this.routeAceessName.getCanbanStageByIdURL(stageId)}`,
 		);
 	}
 
@@ -264,7 +266,7 @@ export class Tasks {
 		stageId: string,
 		title: string,
 		color: string,
-		afterId: string
+		afterId: string,
 	) {
 		return this.httpClient.patch<CanbanStage>(
 			`${this.routeAceessName.getCanbanStageByIdURL(stageId)}`,
@@ -272,7 +274,7 @@ export class Tasks {
 				title,
 				color,
 				afterId,
-			}
+			},
 		);
 	}
 
@@ -283,7 +285,7 @@ export class Tasks {
 	 */
 	deleteCanbanStageById(stageId: string) {
 		return this.httpClient.delete<CanbanStage>(
-			`${this.routeAceessName.getCanbanStageByIdURL(stageId)}`
+			`${this.routeAceessName.getCanbanStageByIdURL(stageId)}`,
 		);
 	}
 
@@ -296,7 +298,7 @@ export class Tasks {
 	moveTaskToStage(stageId: string, id: string) {
 		return this.httpClient.post(
 			`${this.routeAceessName.moveTaskToStageURL(stageId)}`,
-			id
+			id,
 		);
 	}
 
@@ -307,7 +309,7 @@ export class Tasks {
 	 */
 	getCommentsByTaskId(taskId: string) {
 		return this.httpClient.get(
-			`${this.routeAceessName.getCommentsByTaskIdURL(taskId)}`
+			`${this.routeAceessName.getCommentsByTaskIdURL(taskId)}`,
 		);
 	}
 
@@ -320,7 +322,7 @@ export class Tasks {
 	createNewCheckList(taskId: string, title: string) {
 		return this.httpClient.post<CheckList>(
 			`${this.routeAceessName.getCommentsByTaskIdURL(taskId)}`,
-			title
+			title,
 		);
 	}
 
@@ -334,7 +336,7 @@ export class Tasks {
 	updateCheckList(taskId: string, checkListId: string, title: string) {
 		return this.httpClient.patch<CheckList>(
 			`${this.routeAceessName.updateCheckListURL(taskId, checkListId)}`,
-			title
+			title,
 		);
 	}
 
@@ -346,7 +348,7 @@ export class Tasks {
 	 */
 	deleteCheckListById(taskId: string, checkListId: string) {
 		return this.httpClient.delete<CheckList>(
-			`${this.routeAceessName.updateCheckListURL(taskId, checkListId)}`
+			`${this.routeAceessName.updateCheckListURL(taskId, checkListId)}`,
 		);
 	}
 
@@ -357,7 +359,7 @@ export class Tasks {
 	 */
 	getItemsCheckById(checkListId: string) {
 		return this.httpClient.get<CheckListItem>(
-			`${this.routeAceessName.getItemsCheckByIdURL(checkListId)}`
+			`${this.routeAceessName.getItemsCheckByIdURL(checkListId)}`,
 		);
 	}
 
@@ -373,7 +375,7 @@ export class Tasks {
 		checkListId: string,
 		title: string,
 		responsibleId: string,
-		deadline: string
+		deadline: string,
 	) {
 		return this.httpClient.post<CheckListItem>(
 			`${this.routeAceessName.getItemsCheckByIdURL(checkListId)}`,
@@ -381,7 +383,7 @@ export class Tasks {
 				title,
 				responsibleId,
 				deadline,
-			}
+			},
 		);
 	}
 
@@ -395,8 +397,8 @@ export class Tasks {
 		return this.httpClient.delete<CheckListItem>(
 			`${this.routeAceessName.deleteItemToCheckListByIdURL(
 				checkListId,
-				checkListItemId
-			)}`
+				checkListItemId,
+			)}`,
 		);
 	}
 
@@ -414,18 +416,18 @@ export class Tasks {
 		checkListItemId: string,
 		title: string,
 		responsibleId: string,
-		deadline: string
+		deadline: string,
 	) {
 		return this.httpClient.patch<CheckListItem>(
 			`${this.routeAceessName.deleteItemToCheckListByIdURL(
 				checkListId,
-				checkListItemId
+				checkListItemId,
 			)}`,
 			{
 				title,
 				responsibleId,
 				deadline,
-			}
+			},
 		);
 	}
 
@@ -439,7 +441,7 @@ export class Tasks {
 			`${this.routeAceessName.bulkEditionCompleteTasksURL()}`,
 			{
 				ids,
-			}
+			},
 		);
 	}
 
@@ -453,7 +455,7 @@ export class Tasks {
 			`${this.routeAceessName.bulkEditionArchiveTasksURL()}`,
 			{
 				ids,
-			}
+			},
 		);
 	}
 
@@ -467,7 +469,7 @@ export class Tasks {
 			`${this.routeAceessName.bulkEditionDeleteTasksURL()}`,
 			{
 				ids,
-			}
+			},
 		);
 	}
 }
@@ -521,42 +523,49 @@ export interface CheckList {
 }
 
 export enum TaskStatus {
-	TO_DO = "TO_DO",
-	IN_PROGRESS = "IN_PROGRESS",
-	READY_FOR_REVIEW = "READY_FOR_REVIEW",
-	DONE = "DONE",
-	BLOCKED = "BLOCKED",
+	TO_DO = 'TO_DO',
+	IN_PROGRESS = 'IN_PROGRESS',
+	READY_FOR_REVIEW = 'READY_FOR_REVIEW',
+	DONE = 'DONE',
+	BLOCKED = 'BLOCKED',
 }
 
 export enum Priority {
-	LOW = "Low",
-	AVARAGE = "Avarage",
-	HIGH = "High",
+	LOW = 'Low',
+	AVARAGE = 'Avarage',
+	HIGH = 'High',
 }
 
 type createTask = Pick<
-	Task,
-	| "title"
-	| "deadline"
-	| "responsibleId"
-	| "accomplicesIds"
-	| "auditorsIds"
-	| "body"
-	| "priority"
-	| "files"
-	| "fixed"
+Task,
+| 'title'
+| 'deadline'
+| 'responsibleId'
+| 'accomplicesIds'
+| 'auditorsIds'
+| 'body'
+| 'priority'
+| 'files'
+| 'fixed'
 >;
 
 type updateTask = Pick<
-	Task,
-	| "title"
-	| "deadline"
-	| "responsibleId"
-	| "accomplicesIds"
-	| "auditorsIds"
-	| "body"
-	| "priority"
-	| "files"
-	| "archive"
-	| "fixed"
+Task,
+| 'title'
+| 'deadline'
+| 'responsibleId'
+| 'accomplicesIds'
+| 'auditorsIds'
+| 'body'
+| 'priority'
+| 'files'
+| 'archive'
+| 'fixed'
 >;
+
+export interface AvalibleTask {
+	list: string;
+	field_name: string;
+	sort_by: string;
+	order_by: string;
+}
