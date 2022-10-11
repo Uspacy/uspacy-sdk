@@ -5,6 +5,39 @@ import { AxiosInstance } from 'axios';
  */
 export class Users {
 	private namespace = '/company/v1';
+
+	private routeAceessName = {
+		usersServiceBaseURL: `${this.namespace}/users`,
+		getUsersURL: (): string =>
+			`${this.routeAceessName.usersServiceBaseURL}`,
+		userByIDURL: (userId: number): string =>
+			`${this.routeAceessName.usersServiceBaseURL}/${userId}`,
+		userDeactivateURL: (userId: number): string =>
+			`${this.routeAceessName.userByIDURL(userId)}/deactivate/`,
+		userActivateURL: (userId: number): string =>
+			`${this.routeAceessName.userByIDURL(userId)}/activate/`,
+		userUpdateRolesURL: (userId: number): string =>
+			`${this.routeAceessName.userByIDURL(userId)}/updateRoles/`,
+		userUpdatePositionURL: (userId: number): string =>
+			`${this.routeAceessName.userByIDURL(userId)}/updatePosition/`,
+		userUpdatePasswordURL: (userId: number): string =>
+			`${this.routeAceessName.userByIDURL(userId)}/changePassword/`,
+		getSelfProfileURL: (): string =>
+			`${this.routeAceessName.getUsersURL()}/me/`,
+		updateSelfPasswordURL: (): string =>
+			`${this.routeAceessName.getSelfProfileURL()}changePassword/`,
+		forgotPasswordURL: (): string =>
+			`${this.routeAceessName.getUsersURL()}/forgotPassword/`,
+		resetPasswordURL: (): string =>
+			`${this.routeAceessName.getUsersURL()}/resetPassword/`,
+		searchURL: (
+			email: string,
+			firstName: string,
+			lastName: string,
+		): string =>
+			`${this.routeAceessName.getUsersURL()}/search/?email=${email}&firstName=${firstName}&LastName=${lastName}`,
+	};
+
 	/**
 	 * @param config http client
 	 */
@@ -17,12 +50,15 @@ export class Users {
 	 * @returns Array users entity
 	 */
 	list(page: number, list: number) {
-		return this.httpClient.get<User[]>(`${this.namespace}/users/`, {
-			params: {
-				page,
-				list,
+		return this.httpClient.get<User[]>(
+			`${this.routeAceessName.getUsersURL()}`,
+			{
+				params: {
+					page,
+					list,
+				},
 			},
-		});
+		);
 	}
 
 	/**
@@ -31,7 +67,188 @@ export class Users {
 	 * @returns user entity
 	 */
 	getById(id: number) {
-		return this.httpClient.get<User>(`${this.namespace}/users/${id}/`);
+		return this.httpClient.get<User>(
+			`${this.routeAceessName.userByIDURL(id)}`,
+		);
+	}
+
+	/**
+	 * Sign up user by firstName, lastName, email, password.
+	 * @param email user email
+	 * @param password user password
+	 * @param firstName	user firstName
+	 * @param lastName user lastName
+	 * @returns created user
+	 */
+	createUser(
+		email: string,
+		password: string,
+		firstName: string,
+		lastName: string,
+	) {
+		return this.httpClient.post<User>(
+			`${this.routeAceessName.getUsersURL()}`,
+			{
+				email,
+				password,
+				firstName,
+				lastName,
+			},
+		);
+	}
+
+	/**
+	 * Update user data by id.
+	 * @param id user id
+	 * @param config user info (interface)
+	 * @returns updated user
+	 */
+
+	updateUser(id: number, config: updateUser) {
+		return this.httpClient.patch<User>(
+			`${this.routeAceessName.userByIDURL(id)}`,
+			config,
+		);
+	}
+
+	/**
+	 * Deactivate user by id
+	 * @param id user id
+	 * @returns user data with active: false
+	 */
+	deactvateUser(id: number) {
+		return this.httpClient.post<User>(
+			`${this.routeAceessName.userDeactivateURL(id)}`,
+		);
+	}
+
+	/**
+	 * Activate user by id.
+	 * @param id user id
+	 * @returns user data with active: true
+	 */
+	activateUser(id: number) {
+		return this.httpClient.post<User>(
+			`${this.routeAceessName.userActivateURL(id)}`,
+		);
+	}
+
+	/**
+	 * Update user roles by id.
+	 * @param id user id
+	 * @returns user data with new roles
+	 */
+	updateRoles(id: number, roles: UserRole[]) {
+		return this.httpClient.patch<User>(
+			`${this.routeAceessName.userUpdateRolesURL(id)}`,
+			{ roles },
+		);
+	}
+
+	/**
+	 * Update user position by id
+	 * @param id user id
+	 * @param position user position
+	 * @returns user data with new position
+	 */
+	updatePosition(id: number, position: updatePosition) {
+		return this.httpClient.patch<User>(
+			`${this.routeAceessName.userUpdatePositionURL(id)}`,
+			{
+				position,
+			},
+		);
+	}
+
+	/**
+	 * Update user password by id
+	 * @param id user id
+	 * @param password user password
+	 * @returns
+	 */
+	updatePassword(id: number, password: string) {
+		return this.httpClient.patch<User>(
+			`${this.routeAceessName.userUpdatePasswordURL(id)}`,
+			{
+				password,
+			},
+		);
+	}
+
+	/**
+	 * Get self profile
+	 * @returns user profile data
+	 */
+	getSelfProfile() {
+		return this.httpClient.get<User>(
+			`${this.routeAceessName.getSelfProfileURL()}`,
+		);
+	}
+
+	/**
+	 * Update self password.
+	 * @param oldPassword user old password
+	 * @param newPassword user new password
+	 * @returns
+	 */
+	updateSelfPassword(
+		password: string,
+		oldPassword: string,
+		newPassword: string,
+	) {
+		return this.httpClient.patch<User>(
+			`${this.routeAceessName.updateSelfPasswordURL()}`,
+			{
+				oldPassword,
+				newPassword,
+				password,
+			},
+		);
+	}
+
+	/**
+	 * Reset password
+	 * @param email user email
+	 * @returns
+	 */
+	forgotPassword(email: string) {
+		return this.httpClient.post<User>(
+			`${this.routeAceessName.forgotPasswordURL()}`,
+			{
+				email,
+			},
+		);
+	}
+
+	/**
+	 * Reset password.
+	 * @param email user email
+	 * @param password user password
+	 * @param token auth token
+	 * @returns
+	 */
+	resetPassword(email: string, password: string, token: string) {
+		return this.httpClient.post<User>(
+			`${this.routeAceessName.resetPasswordURL()}`,
+			{
+				email,
+				password,
+				token,
+			},
+		);
+	}
+
+	/**
+	 * Search
+	 * @param email user email
+	 * @param firstName user firstName
+	 * @param lastName user lastName
+	 * @returns
+	 */
+	search(email: string, firstName: string, lastName: string) {
+		return this.httpClient.get<User>(
+			`${this.routeAceessName.searchURL(email, firstName, lastName)}/`,
+		);
 	}
 }
 
@@ -60,7 +277,7 @@ export interface User {
 		value: string;
 	}[];
 	active: boolean;
-	birthday: string;
+	birthday: string | number;
 	timestamp: number;
 	showBirthYear: boolean;
 	roles: UserRole[];
@@ -71,3 +288,6 @@ export interface User {
 		link: string;
 	}[];
 }
+
+type updateUser = Omit<User, 'id' | 'active' | 'position' | 'roles'>;
+type updatePosition = Pick<User, 'position'>;

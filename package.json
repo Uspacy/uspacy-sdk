@@ -1,6 +1,6 @@
 {
   "name": "@uspacy/sdk",
-  "version": "0.0.1-alpha.8",
+  "version": "0.0.2",
   "description": "Uspacy javascript sdk",
   "repository": "git@github.com:Uspacy/uspacy-sdk.git",
   "homepage": "https://uspacy.github.io/uspacy-sdk/",

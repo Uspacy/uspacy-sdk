@@ -20,7 +20,10 @@ export class LocalStorage implements ILocalStorage {
 
 	setItem(key: string, body: object | string | boolean | undefined) {
 		if (!body) return;
-		localStorage.setItem(LocalStorage.getKey(key), typeof body === 'object' ? JSON.stringify(body) : String(body));
+		localStorage.setItem(
+			LocalStorage.getKey(key),
+			typeof body === 'object' ? JSON.stringify(body) : String(body),
+		);
 	}
 
 	removeItem(key: string) {

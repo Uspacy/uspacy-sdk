@@ -45,7 +45,7 @@ export class Auth {
 	 * @param body email and token
 	 * @returns new jwt tokens
 	 */
-	confirmEmail(body: { email: string, token: string }) {
+	confirmEmail(body: { email: string; token: string }) {
 		return this.httpClient.post<ReponseJwt>(
 			`${this.namespace}/auth/signIn/`,
 			body,

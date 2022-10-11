@@ -10,7 +10,7 @@ export * from './services';
  * @param params config
  * @returns uspacy instance
  */
-export default function({ apiUrl, httpClientConfig }: UspacyConfig) {
+export default function ({ apiUrl, httpClientConfig }: UspacyConfig) {
 	const httpClient = createHttpClient(apiUrl, httpClientConfig);
 	return {
 		httpClient,

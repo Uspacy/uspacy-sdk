@@ -5,10 +5,7 @@ module.exports = {
 		'plugin:@typescript-eslint/recommended',
 	],
 	parser: '@typescript-eslint/parser',
-	plugins: [
-		'@typescript-eslint',
-		'simple-import-sort',
-	],
+	plugins: ['@typescript-eslint', 'simple-import-sort'],
 	rules: {
 		quotes: ['error', 'single'],
 		'max-len': [
@@ -22,11 +19,7 @@ module.exports = {
 		'comma-dangle': ['error', 'always-multiline'],
 		indent: 'off',
 		'@typescript-eslint/indent': ['error', 'tab', { SwitchCase: 1 }],
-		'spaced-comment': [
-			'error',
-			'always',
-			{ 'markers': ['/'] },
-		],
+		'spaced-comment': ['error', 'always', { markers: ['/'] }],
 		'no-trailing-spaces': 'error',
 		semi: ['error', 'always'],
 		'no-shadow': 'off',

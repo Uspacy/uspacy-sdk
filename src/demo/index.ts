@@ -11,7 +11,8 @@ const start = async () => {
 	const { httpClient } = uspacyClient;
 	httpClient.interceptors.request.use((res) => {
 		const token = getToken();
-		if (token && res.headers) res.headers['Authorization'] = `Bearer ${token}`;
+		if (token && res.headers)
+			res.headers['Authorization'] = `Bearer ${token}`;
 		return res;
 	});
 	httpClient.interceptors.response.use(
@@ -26,21 +27,29 @@ const start = async () => {
 		async (error) => {
 			try {
 				const originalRequest = error.config;
-				if (error.response.status === 401 && !originalRequest._retry && !originalRequest.url.includes('auth/refreshToken')) {
+				if (
+					error.response.status === 401 &&
+					!originalRequest._retry &&
+					!originalRequest.url.includes('auth/refreshToken')
+				) {
 					if (!hasRemember()) throw new Error('logout');
 					console.log(111);
 					const refreshToken = getRefreshToken();
 					if (!refreshToken) throw new Error('logout');
 					originalRequest._retry = true;
-					const newToken = await uspacyClient.auth.refreshToken(refreshToken);
-					originalRequest.headers['Authorization'] = `Bearer ${newToken.data.jwt}`;
+					const newToken = await uspacyClient.auth.refreshToken(
+						refreshToken,
+					);
+					originalRequest.headers[
+						'Authorization'
+					] = `Bearer ${newToken.data.jwt}`;
 					return httpClient(originalRequest);
 				}
-			} catch(_) {
+			} catch (_) {
 				logout();
 				return Promise.reject(error);
 			}
-		}
+		},
 	);
 	const token = getToken();
 	await uspacyClient.auth.login('root@gmail.com', '123456');
