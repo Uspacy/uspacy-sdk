@@ -162,7 +162,7 @@ export interface Post {
 	comments?: Comments[]
 }
 
-export interface Comments {
+interface Comments {
 	id: string;
 	massege: string;
 	authorId: string;
