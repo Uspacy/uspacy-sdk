@@ -168,6 +168,7 @@ interface Comments {
 	authorId: string;
 	files?: string[];
 	date: number;
+
 }
 
 export interface RecipientsPost {
