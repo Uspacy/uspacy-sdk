@@ -107,7 +107,7 @@ export class NewsFeed {
 	 * @returns list of comments
 	 */
 	getComments(page: number, list: number, postId: number) {
-		return this.httpClient.get<Post>(
+		return this.httpClient.get<Comments[]>(
 			`${this.routeAceessName.getCommentsURL(page, list, postId)}`,
 		);
 	}
@@ -119,7 +119,7 @@ export class NewsFeed {
 	 * @returns
 	 */
 	createComment(postId: number, config: createComment) {
-		return this.httpClient.post<Post>(
+		return this.httpClient.post<Comments>(
 			`${this.routeAceessName.createCommentURL(postId)}`,
 			config,
 		);
@@ -133,7 +133,7 @@ export class NewsFeed {
 	 * @returns
 	 */
 	updateComment(postId: number, commentId: number, config: createComment) {
-		return this.httpClient.patch<Post>(
+		return this.httpClient.patch<Comments>(
 			`${this.routeAceessName.updateCommentURL(postId, commentId)}`,
 			{ config },
 		);
@@ -146,7 +146,7 @@ export class NewsFeed {
 	 * @returns
 	 */
 	deleteComment(postId: number, commentId: number) {
-		return this.httpClient.delete<Post>(
+		return this.httpClient.delete(
 			`${this.routeAceessName.updateCommentURL(postId, commentId)}`,
 		);
 	}
@@ -159,15 +159,15 @@ export interface Post {
 	authorId: string;
 	files: string[];
 	date?: number;
-	comments?: [
-		{
-			id: string;
-			massege: string;
-			authorId: string;
-			files?: string[];
-			date: number;
-		},
-	];
+	comments?: Comments[]
+}
+
+export interface Comments {
+	id: string;
+	massege: string;
+	authorId: string;
+	files?: string[];
+	date: number;
 }
 
 export interface RecipientsPost {
