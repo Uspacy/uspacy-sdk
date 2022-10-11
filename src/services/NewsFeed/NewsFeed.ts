@@ -152,6 +152,9 @@ export class NewsFeed {
 	}
 }
 
+/**
+ * Post entity
+ */
 export interface Post {
 	id: string;
 	title: string;
@@ -162,6 +165,9 @@ export interface Post {
 	comments?: Comments[]
 }
 
+/**
+ * Comments entity
+ */
 interface Comments {
 	id: string;
 	massege: string;
@@ -171,6 +177,9 @@ interface Comments {
 
 }
 
+/**
+ * Recipients post entity
+ */
 export interface RecipientsPost {
 	exclude: {
 		departmentsIds: string[];
@@ -182,7 +191,14 @@ export interface RecipientsPost {
 	};
 }
 
+/**
+ * Type for create post
+ */
 type createPost = Omit<Post, 'id' | 'authorId' | 'comments' | 'date'>;
+
+/**
+ * Type for create comment
+ */
 type createComment = Omit<
 Post,
 'authorId' | 'date' | 'title' | 'comments' | 'id'

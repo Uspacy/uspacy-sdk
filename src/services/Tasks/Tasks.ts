@@ -474,6 +474,9 @@ export class Tasks {
 	}
 }
 
+/**
+ * Task entity
+ */
 export interface Task {
 	title: string;
 	deadline: number;
@@ -496,6 +499,9 @@ export interface Task {
 	files: string[];
 }
 
+/**
+ * Comments entity
+ */
 export interface Comments {
 	id: string;
 	files: string[];
@@ -504,6 +510,9 @@ export interface Comments {
 	date: number;
 }
 
+/**
+ * Canban stage entity
+ */
 export interface CanbanStage {
 	id: string;
 	title: string;
@@ -511,17 +520,26 @@ export interface CanbanStage {
 	afterId: string;
 }
 
+/**
+ * Checklist item entity
+ */
 export interface CheckListItem {
 	title: string;
 	responsibleId: string;
 	deadline: number;
 }
 
+/**
+ * Checklist entity
+ */
 export interface CheckList {
 	id: string;
 	title: string;
 }
 
+/**
+ * Enum Task Status
+ */
 export enum TaskStatus {
 	TO_DO = 'TO_DO',
 	IN_PROGRESS = 'IN_PROGRESS',
@@ -530,12 +548,18 @@ export enum TaskStatus {
 	BLOCKED = 'BLOCKED',
 }
 
+/**
+ * Enum prioriry tasks
+ */
 export enum Priority {
 	LOW = 'Low',
 	AVARAGE = 'Avarage',
 	HIGH = 'High',
 }
 
+/**
+ * Type for creacte task
+ */
 type createTask = Pick<
 Task,
 | 'title'
@@ -549,6 +573,9 @@ Task,
 | 'fixed'
 >;
 
+/**
+ * Type for update task
+ */
 type updateTask = Pick<
 Task,
 | 'title'
@@ -563,6 +590,9 @@ Task,
 | 'fixed'
 >;
 
+/**
+ * Avalible task entity
+ */
 export interface AvalibleTask {
 	list: string;
 	field_name: string;

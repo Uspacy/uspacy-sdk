@@ -252,6 +252,9 @@ export class Users {
 	}
 }
 
+/**
+ * Enum UserRole
+ */
 export enum UserRole {
 	OWNER = 'OWNER',
 	ADMIN = 'ADMIN',
@@ -289,5 +292,12 @@ export interface User {
 	}[];
 }
 
+/**
+ * Type for update user
+ */
 type updateUser = Omit<User, 'id' | 'active' | 'position' | 'roles'>;
+
+/**
+ * Type for update user position
+ */
 type updatePosition = Pick<User, 'position'>;
