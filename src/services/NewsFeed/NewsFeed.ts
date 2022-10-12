@@ -1,5 +1,7 @@
 import { AxiosInstance } from 'axios';
 
+import { Comments } from '../Tasks';
+
 /**
  * NewsFeed service
  */
@@ -166,18 +168,6 @@ export interface Post {
 }
 
 /**
- * Comments entity
- */
-interface Comments {
-	id: string;
-	massege: string;
-	authorId: string;
-	files?: string[];
-	date: number;
-
-}
-
-/**
  * Recipients post entity
  */
 export interface RecipientsPost {
@@ -194,12 +184,12 @@ export interface RecipientsPost {
 /**
  * Type for create post
  */
-type createPost = Omit<Post, 'id' | 'authorId' | 'comments' | 'date'>;
+export type createPost = Omit<Post, 'id' | 'authorId' | 'comments' | 'date'>;
 
 /**
  * Type for create comment
  */
-type createComment = Omit<
+export type createComment = Omit<
 Post,
 'authorId' | 'date' | 'title' | 'comments' | 'id'
 >;

@@ -560,7 +560,7 @@ export enum Priority {
 /**
  * Type for creacte task
  */
-type createTask = Pick<
+export type createTask = Pick<
 Task,
 | 'title'
 | 'deadline'
@@ -576,7 +576,7 @@ Task,
 /**
  * Type for update task
  */
-type updateTask = Pick<
+export type updateTask = Pick<
 Task,
 | 'title'
 | 'deadline'
