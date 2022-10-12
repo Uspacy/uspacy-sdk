@@ -1,5 +1,7 @@
 import { AxiosInstance } from 'axios';
 
+import { Comments } from '../Tasks';
+
 /**
  * NewsFeed service
  */
@@ -152,6 +154,9 @@ export class NewsFeed {
 	}
 }
 
+/**
+ * Post entity
+ */
 export interface Post {
 	id: string;
 	title: string;
@@ -162,15 +167,9 @@ export interface Post {
 	comments?: Comments[]
 }
 
-interface Comments {
-	id: string;
-	massege: string;
-	authorId: string;
-	files?: string[];
-	date: number;
-
-}
-
+/**
+ * Recipients post entity
+ */
 export interface RecipientsPost {
 	exclude: {
 		departmentsIds: string[];
@@ -182,8 +181,15 @@ export interface RecipientsPost {
 	};
 }
 
-type createPost = Omit<Post, 'id' | 'authorId' | 'comments' | 'date'>;
-type createComment = Omit<
+/**
+ * Type for create post
+ */
+export type createPost = Omit<Post, 'id' | 'authorId' | 'comments' | 'date'>;
+
+/**
+ * Type for create comment
+ */
+export type createComment = Omit<
 Post,
 'authorId' | 'date' | 'title' | 'comments' | 'id'
 >;
