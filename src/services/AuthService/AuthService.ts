@@ -4,7 +4,7 @@ import { AxiosInstance } from 'axios';
  * Auth service
  */
 export class Auth {
-	private namespace = '/company/v1';
+	private namespace = '/company/v1/auth';
 	constructor(private httpClient: AxiosInstance) {}
 
 	/**
@@ -14,12 +14,21 @@ export class Auth {
 	 * @returns jwt tokens
 	 */
 	login(email: string, password: string) {
+		return this.httpClient.post<ReponseJwt>(`${this.namespace}/signIn/`, {
+			email,
+			password,
+		});
+	}
+
+	/**
+	 * Confirm user email
+	 * @param body email and token
+	 * @returns new jwt tokens
+	 */
+	confirmEmail(body: { email: string; token: string }) {
 		return this.httpClient.post<ReponseJwt>(
-			`${this.namespace}/auth/signIn/`,
-			{
-				email,
-				password,
-			},
+			`${this.namespace}/confirmToken/`,
+			body,
 		);
 	}
 
@@ -30,7 +39,7 @@ export class Auth {
 	 */
 	refreshToken(refreshToken: string) {
 		return this.httpClient.post<ReponseJwt>(
-			`${this.namespace}/auth/signIn/`,
+			`${this.namespace}/refreshToken/`,
 			null,
 			{
 				headers: {
@@ -41,13 +50,21 @@ export class Auth {
 	}
 
 	/**
-	 * Confirm user email
-	 * @param body email and token
+	 * Create user by invitation
+	 * @param email email
+	 * @param password password
+	 * @param firstName firstName
+	 * @param lastName lastName
 	 * @returns new jwt tokens
 	 */
-	confirmEmail(body: { email: string; token: string }) {
+	createUserByInvite(body: {
+		email: string;
+		password: string;
+		firstName: string;
+		lastName: string;
+	}) {
 		return this.httpClient.post<ReponseJwt>(
-			`${this.namespace}/auth/signIn/`,
+			`${this.namespace}/register/`,
 			body,
 		);
 	}

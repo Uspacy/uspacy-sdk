@@ -7,21 +7,20 @@ export class Users {
 	private namespace = '/company/v1';
 
 	private routeAceessName = {
-		usersServiceBaseURL: `${this.namespace}/users`,
-		getUsersURL: (): string =>
-			`${this.routeAceessName.usersServiceBaseURL}`,
-		userByIDURL: (userId: number): string =>
-			`${this.routeAceessName.usersServiceBaseURL}/${userId}`,
-		userDeactivateURL: (userId: number): string =>
-			`${this.routeAceessName.userByIDURL(userId)}/deactivate/`,
-		userActivateURL: (userId: number): string =>
-			`${this.routeAceessName.userByIDURL(userId)}/activate/`,
-		userUpdateRolesURL: (userId: number): string =>
-			`${this.routeAceessName.userByIDURL(userId)}/updateRoles/`,
-		userUpdatePositionURL: (userId: number): string =>
-			`${this.routeAceessName.userByIDURL(userId)}/updatePosition/`,
-		userUpdatePasswordURL: (userId: number): string =>
-			`${this.routeAceessName.userByIDURL(userId)}/changePassword/`,
+		BaseURL: `${this.namespace}/users/`,
+		getUsersURL: (): string => `${this.routeAceessName.BaseURL}/`,
+		userByIDURL: (id: string): string =>
+			`${this.routeAceessName.BaseURL}/${id}`,
+		userDeactivateURL: (id: string): string =>
+			`${this.routeAceessName.userByIDURL(id)}/deactivate/`,
+		userActivateURL: (id: string): string =>
+			`${this.routeAceessName.userByIDURL(id)}/activate/`,
+		userUpdateRolesURL: (id: string): string =>
+			`${this.routeAceessName.userByIDURL(id)}/updateRoles/`,
+		userUpdatePositionURL: (id: string): string =>
+			`${this.routeAceessName.userByIDURL(id)}/updatePosition/`,
+		userUpdatePasswordURL: (id: string): string =>
+			`${this.routeAceessName.userByIDURL(id)}/changePassword/`,
 		getSelfProfileURL: (): string =>
 			`${this.routeAceessName.getUsersURL()}/me/`,
 		updateSelfPasswordURL: (): string =>
@@ -35,7 +34,13 @@ export class Users {
 			firstName: string,
 			lastName: string,
 		): string =>
-			`${this.routeAceessName.getUsersURL()}/search/?email=${email}&firstName=${firstName}&LastName=${lastName}`,
+			`${this.routeAceessName.getUsersURL()}/search/?email=${email}&firstName=${firstName}&LastName=${lastName}/`,
+		avatarUploadURL: (): string =>
+			`${this.routeAceessName.getUsersURL()}/uploadAvatar/`,
+		checkEmailURL: (email: string): string =>
+			`${this.routeAceessName.getUsersURL()}/checkEmail/?email=${email}`,
+		getListUsersByFilterURL: (): string =>
+			`${this.routeAceessName.getUsersURL()}/getUsersByField/`,
 	};
 
 	/**
@@ -49,7 +54,7 @@ export class Users {
 	 * @param list elements count
 	 * @returns Array users entity
 	 */
-	list(page: number, list: number) {
+	getUsers(page: number, list: number) {
 		return this.httpClient.get<User[]>(
 			`${this.routeAceessName.getUsersURL()}`,
 			{
@@ -58,17 +63,6 @@ export class Users {
 					list,
 				},
 			},
-		);
-	}
-
-	/**
-	 * Get user by id
-	 * @param id user id
-	 * @returns user entity
-	 */
-	getById(id: number) {
-		return this.httpClient.get<User>(
-			`${this.routeAceessName.userByIDURL(id)}`,
 		);
 	}
 
@@ -98,13 +92,24 @@ export class Users {
 	}
 
 	/**
+	 * Get user by id
+	 * @param id user id
+	 * @returns user entity
+	 */
+	getUserById(id: string) {
+		return this.httpClient.get<User>(
+			`${this.routeAceessName.userByIDURL(id)}`,
+		);
+	}
+
+	/**
 	 * Update user data by id.
 	 * @param id user id
 	 * @param config user info (interface)
 	 * @returns updated user
 	 */
 
-	updateUser(id: number, config: updateUser) {
+	updateUser(id: string, config: updateUser) {
 		return this.httpClient.patch<User>(
 			`${this.routeAceessName.userByIDURL(id)}`,
 			config,
@@ -116,7 +121,7 @@ export class Users {
 	 * @param id user id
 	 * @returns user data with active: false
 	 */
-	deactvateUser(id: number) {
+	deactivateUser(id: string) {
 		return this.httpClient.post<User>(
 			`${this.routeAceessName.userDeactivateURL(id)}`,
 		);
@@ -127,7 +132,7 @@ export class Users {
 	 * @param id user id
 	 * @returns user data with active: true
 	 */
-	activateUser(id: number) {
+	activateUser(id: string) {
 		return this.httpClient.post<User>(
 			`${this.routeAceessName.userActivateURL(id)}`,
 		);
@@ -138,7 +143,7 @@ export class Users {
 	 * @param id user id
 	 * @returns user data with new roles
 	 */
-	updateRoles(id: number, roles: UserRole[]) {
+	updateRoles(id: string, roles: UserRole[]) {
 		return this.httpClient.patch<User>(
 			`${this.routeAceessName.userUpdateRolesURL(id)}`,
 			{ roles },
@@ -151,7 +156,7 @@ export class Users {
 	 * @param position user position
 	 * @returns user data with new position
 	 */
-	updatePosition(id: number, position: updatePosition) {
+	updatePosition(id: string, position: updatePosition) {
 		return this.httpClient.patch<User>(
 			`${this.routeAceessName.userUpdatePositionURL(id)}`,
 			{
@@ -166,7 +171,7 @@ export class Users {
 	 * @param password user password
 	 * @returns
 	 */
-	updatePassword(id: number, password: string) {
+	updatePassword(id: string, password: string) {
 		return this.httpClient.patch<User>(
 			`${this.routeAceessName.userUpdatePasswordURL(id)}`,
 			{
@@ -247,7 +252,44 @@ export class Users {
 	 */
 	search(email: string, firstName: string, lastName: string) {
 		return this.httpClient.get<User>(
-			`${this.routeAceessName.searchURL(email, firstName, lastName)}/`,
+			`${this.routeAceessName.searchURL(email, firstName, lastName)}`,
+		);
+	}
+
+	/**
+	 * Avatar upload
+	 * @param avatar
+	 * @returns
+	 */
+	avatarUpload(avatar: number) {
+		return this.httpClient.post<User>(
+			`${this.routeAceessName.avatarUploadURL()}`,
+			{
+				avatar,
+			},
+		);
+	}
+
+	/**
+	 * Check email
+	 * @param email
+	 * @returns
+	 */
+	checkEmail(email: string) {
+		return this.httpClient.get<getEmailExist>(
+			`${this.routeAceessName.checkEmailURL(email)}`,
+		);
+	}
+
+	/**
+	 * Getting a list of users by filter
+	 * @param ids
+	 * @returns
+	 */
+	getListUsersByFilter(ids: string[]) {
+		return this.httpClient.post<User>(
+			`${this.routeAceessName.getListUsersByFilterURL()}`,
+			{ ids },
 		);
 	}
 }
@@ -278,7 +320,6 @@ export interface User {
 	}[];
 	active: boolean;
 	birthday: string | number;
-	timestamp: number;
 	showBirthYear: boolean;
 	roles: UserRole[];
 	departmentsIds: string[];
@@ -287,6 +328,11 @@ export interface User {
 		name: string;
 		link: string;
 	}[];
+}
+
+interface getEmailExist {
+	status: boolean;
+	message: string;
 }
 
 type updateUser = Omit<User, 'id' | 'active' | 'position' | 'roles'>;

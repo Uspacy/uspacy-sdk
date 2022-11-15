@@ -1,7 +1,7 @@
 import { AxiosInstance } from 'axios';
 
 /**
- * Tasks service
+ * FilesService service
  */
 export class FilesService {
 	private namespace = 'files/v1/files';
@@ -12,10 +12,11 @@ export class FilesService {
 			entityType: EntityType[],
 			entityId: number,
 		): string =>
-			`${this.routeAceessName}/files?entity_type=${entityType}&entityId=${entityId}/`,
+			`${this.routeAceessName.BaseURL}/?entity_type=${entityType}&entityId=${entityId}/`,
+		uploadOneOrMoreFilesURL: (): string =>
+			`${this.routeAceessName.BaseURL}/`,
 		showInfoAboutFileURL: (id: number): string =>
 			`${this.routeAceessName.BaseURL}/${id}`,
-		uploadOneOrMoreFilesURL: (): string => `${this.namespace}/`,
 	};
 
 	/**

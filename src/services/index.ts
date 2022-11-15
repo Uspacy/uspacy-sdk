@@ -1,8 +1,9 @@
-export * from './Auth';
-export * from './Users';
-export * from './NewsFeed';
-export * from './Departments';
-export * from './Tasks';
+export * from './AuthService';
+export * from './CommentsService';
+export * from './DepartmentsService';
 export * from './FilesService';
-
-
+export * from './InviteService';
+export * from './NewsFeedService';
+export * from './RolesService';
+export * from './TasksService';
+export * from './UsersService';
