@@ -28,11 +28,14 @@ export class Tasks {
 			`${this.routeAceessName.BaseURL}tasks/${taskID}/`,
 		denialATaskURL: (taskID: string): string =>
 			`${this.routeAceessName.editTaskByIdURL(taskID)}denial/`,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		getCommentsURL: (taskID: string, params: any): string => {
+		getCommentsURL: (
+			taskID: string,
+			page: number,
+			list: number,
+		): string => {
 			return `${this.routeAceessName.editTaskByIdURL(
 				taskID,
-			)}${isAvailibleParams(params)}`;
+			)}comments/?page=${page}&list=${list}`;
 		},
 		createCommentURL: (taskID: string): string =>
 			`${this.routeAceessName.editTaskByIdURL(taskID)}comments/`,
@@ -50,7 +53,7 @@ export class Tasks {
 				taskId,
 			)}${checkListId}/`,
 		getItemsCheckByIdURL: (checkListId: string): string =>
-			`${this.routeAceessName.BaseURL}/checklist/${checkListId}`,
+			`${this.routeAceessName.BaseURL}checklist/${checkListId}`,
 		deleteItemToCheckListByIdURL: (
 			checkListId: string,
 			checkListItemId: string,
@@ -59,11 +62,13 @@ export class Tasks {
 				checkListId,
 			)}/${checkListItemId}`,
 		bulkEditionCompleteTasksURL: (): string =>
-			`${this.routeAceessName.createTaskURL}/massEdit/complete`,
+			`${this.routeAceessName.createTaskURL}massEdit/complete`,
 		bulkEditionArchiveTasksURL: (): string =>
-			`${this.routeAceessName.createTaskURL}/massEdit/archive`,
+			`${this.routeAceessName.createTaskURL}massEdit/archive`,
 		bulkEditionDeleteTasksURL: (): string =>
-			`${this.routeAceessName.createTaskURL}/massEdit/delete`,
+			`${this.routeAceessName.createTaskURL}massEdit/delete`,
+		transferTasksAnotherUserURL: (): string =>
+			`${this.routeAceessName.BaseURL}delegation`,
 	};
 
 	/**
@@ -100,116 +105,101 @@ export class Tasks {
 
 	/**
 	 * Get task by id
-	 * @param taskId task id
+	 * @param id task id
 	 * @returns
 	 */
-	getTaskById(taskId: string) {
+	getTaskById(id: string) {
 		return this.httpClient.get<Task>(
-			`${this.routeAceessName.getTaskByIdURL(taskId)}`,
+			`${this.routeAceessName.getTaskByIdURL(id)}`,
 		);
 	}
 
 	/**
 	 * Edit task by id
-	 * @param taskId task id
-	 * @param config type of task intarface
+	 * @param id task id
+	 * @param config type of task interface
 	 * @returns
 	 */
-	editTaskById(taskId: string, config: updateTask) {
+	editTaskById(id: string, config: updateTask) {
 		return this.httpClient.patch<Task>(
-			`${this.routeAceessName.editTaskByIdURL(taskId)}`,
+			`${this.routeAceessName.editTaskByIdURL(id)}`,
 			config,
 		);
 	}
 
 	/**
 	 * Delete task by id
-	 * @param taskId tast id
+	 * @param id task id
 	 * @returns
 	 */
-	deleteTaskById(taskId: string) {
+	deleteTaskById(id: string) {
 		return this.httpClient.delete<Task>(
-			`${this.routeAceessName.editTaskByIdURL(taskId)}`,
+			`${this.routeAceessName.editTaskByIdURL(id)}`,
 		);
 	}
 
 	/**
 	 *
-	 * @param taskId task id
+	 * @param id task id
 	 * @param reason why do you want to cancel the task?
 	 * @returns
 	 */
-	denialATask(taskId: string, reason: string) {
+	denialATask(id: string, reason: string) {
 		return this.httpClient.post<Task>(
-			`${this.routeAceessName.denialATaskURL(taskId)}`,
+			`${this.routeAceessName.denialATaskURL(id)}`,
 			reason,
 		);
 	}
 
 	/**
 	 * Get comments task by id
-	 * @param taskId task id
+	 * @param id task id
 	 * @param page current page
 	 * @param list how many items should be per page
 	 * @returns
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	getCommentsById(taskId: string, params: any) {
+	getCommentsById(id: string, page: number, list: number) {
 		return this.httpClient.get<Comments>(
-			`${this.routeAceessName.getCommentsURL(taskId, params)}`,
+			`${this.routeAceessName.getCommentsURL(id, page, list)}`,
 		);
 	}
 
 	/**
 	 * Create comment for task
-	 * @param taskId task id
-	 * @param message comment messsage
-	 * @param files attach files
+	 * @param id task id
 	 * @param denial When the comment is a rejection and the task is not accepted.
 	 * @returns
 	 */
-	createComment(
-		taskId: string,
-		message: string,
-		files: string[],
-		denial: boolean,
-	) {
-		return this.httpClient.post<Comments>(
-			`${this.routeAceessName.createCommentURL(taskId)}`,
-			{ message, files, denial },
+	createComment(id: string, denial: boolean) {
+		return this.httpClient.post<CreateCommentForTask>(
+			`${this.routeAceessName.createCommentURL(id)}`,
+			{ denial },
 		);
 	}
 
 	/**
 	 * Delete comment to task by id
-	 * @param taskId task id
+	 * @param id task id
 	 * @param commentId comment id
 	 * @returns
 	 */
-	deleteComment(taskId: string, commentId: string) {
+	deleteComment(id: string, commentId: string) {
 		return this.httpClient.delete(
-			`${this.routeAceessName.deleteCommentURL(taskId, commentId)}`,
+			`${this.routeAceessName.deleteCommentURL(id, commentId)}`,
 		);
 	}
 
 	/**
 	 * Update comment for task
-	 * @param taskId task id
+	 * @param id task id
 	 * @param commentId comment id
 	 * @returns
 	 */
-	updateComment(
-		taskId: string,
-		commentId: string,
-		message: string,
-		files: string[],
-		denial: boolean,
-	) {
-		return this.httpClient.patch(
-			`${this.routeAceessName.deleteCommentURL(taskId, commentId)}`,
+	updateComment(id: string, commentId: string, denial: boolean) {
+		return this.httpClient.patch<CreateCommentForTask>(
+			`${this.routeAceessName.deleteCommentURL(id, commentId)}`,
 			{
-				message,
-				files,
 				denial,
 			},
 		);
@@ -304,51 +294,51 @@ export class Tasks {
 
 	/**
 	 * Get comments task by id.
-	 * @param taskId task id
+	 * @param id task id
 	 * @returns task comments
 	 */
-	getCommentsByTaskId(taskId: string) {
-		return this.httpClient.get(
-			`${this.routeAceessName.getCommentsByTaskIdURL(taskId)}`,
+	getCommentsByTaskId(id: string) {
+		return this.httpClient.get<CommentsTaskById>(
+			`${this.routeAceessName.getCommentsByTaskIdURL(id)}`,
 		);
 	}
 
 	/**
 	 * Create check list for task
-	 * @param taskId task id
+	 * @param id task id
 	 * @param title title
 	 * @returns
 	 */
-	createNewCheckList(taskId: string, title: string) {
+	createNewCheckList(id: string, title: string) {
 		return this.httpClient.post<CheckList>(
-			`${this.routeAceessName.getCommentsByTaskIdURL(taskId)}`,
+			`${this.routeAceessName.getCommentsByTaskIdURL(id)}`,
 			title,
 		);
 	}
 
 	/**
 	 * Update check list for task
-	 * @param taskId task id
-	 * @param checkListId checlist id
+	 * @param id task id
+	 * @param checkListId checklist id
 	 * @param title title checklist
 	 * @returns
 	 */
-	updateCheckList(taskId: string, checkListId: string, title: string) {
-		return this.httpClient.patch<CheckList>(
-			`${this.routeAceessName.updateCheckListURL(taskId, checkListId)}`,
+	updateCheckList(id: string, checkListId: string, title: string) {
+		return this.httpClient.patch<UpdateCheckList>(
+			`${this.routeAceessName.updateCheckListURL(id, checkListId)}`,
 			title,
 		);
 	}
 
 	/**
 	 * Delete check list to task by id
-	 * @param taskId tast id
+	 * @param id task id
 	 * @param checkListId checklist id
 	 * @returns
 	 */
-	deleteCheckListById(taskId: string, checkListId: string) {
+	deleteCheckListById(id: string, checkListId: string) {
 		return this.httpClient.delete<CheckList>(
-			`${this.routeAceessName.updateCheckListURL(taskId, checkListId)}`,
+			`${this.routeAceessName.updateCheckListURL(id, checkListId)}`,
 		);
 	}
 
@@ -472,6 +462,25 @@ export class Tasks {
 			},
 		);
 	}
+
+	/**
+	 * Transfer tasks to another user
+	 * @returns
+	 */
+	transferTasksAnotherUser(
+		oldUserId: string,
+		newUserId: string,
+		task: { owner: boolean; responsible: boolean },
+	) {
+		return this.httpClient.post(
+			`${this.routeAceessName.transferTasksAnotherUserURL()}`,
+			{
+				oldUserId,
+				newUserId,
+				task,
+			},
+		);
+	}
 }
 
 export interface Task {
@@ -493,6 +502,8 @@ export interface Task {
 	resultCommentId: string;
 	fixed: boolean;
 	archive: boolean;
+	departmentId: string;
+	groupId: string;
 	files: string[];
 }
 
@@ -504,6 +515,17 @@ export interface Comments {
 	date: number;
 }
 
+export interface CreateCommentForTask {
+	responsibleId: string;
+	denial: boolean;
+}
+
+export interface CommentsTaskById {
+	id: string;
+	title: string;
+	checkListItemIds: string[];
+}
+
 export interface CanbanStage {
 	id: string;
 	title: string;
@@ -512,6 +534,7 @@ export interface CanbanStage {
 }
 
 export interface CheckListItem {
+	id: string;
 	title: string;
 	responsibleId: string;
 	deadline: number;
@@ -519,6 +542,10 @@ export interface CheckListItem {
 
 export interface CheckList {
 	id: string;
+	title: string;
+}
+
+export interface UpdateCheckList {
 	title: string;
 }
 
@@ -546,7 +573,9 @@ Task,
 | 'body'
 | 'priority'
 | 'files'
+| 'departmentId'
 | 'fixed'
+| 'groupId'
 >;
 
 type updateTask = Pick<
@@ -559,11 +588,13 @@ Task,
 | 'body'
 | 'priority'
 | 'files'
+| 'departmentId'
 | 'archive'
 | 'fixed'
 >;
 
 export interface AvalibleTask {
+	page: number;
 	list: string;
 	field_name: string;
 	sort_by: string;

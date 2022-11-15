@@ -7,7 +7,7 @@ export class Departments {
 	private namespace = 'company/v1/departments';
 
 	private routeAceessName = {
-		depServiceBaseURL: `${this.namespace}`,
+		BaseURL: `${this.namespace}`,
 		getDepartmentsURL: (
 			page: string,
 			list: string,
@@ -16,17 +16,18 @@ export class Departments {
 			parentDepartmentId: string,
 			userIds: string,
 		): string =>
-			`${this.routeAceessName.depServiceBaseURL}
+			`${this.routeAceessName.BaseURL}
 			/?page=${page}&list=${list}&filter[name]=${name}&filter[headId]=${headId}&filter[parentDepartmentId]=
-			${parentDepartmentId}&filter[usersIds]=${userIds}`,
-		createDepartmentURL: (): string =>
-			`${this.routeAceessName.depServiceBaseURL}`,
-		getDepartmentByIdURL: (depID: number): string =>
-			`${this.routeAceessName.depServiceBaseURL}/${depID}`,
-		updateDepartmentURL: (depID: number): string =>
-			`${this.routeAceessName.depServiceBaseURL}/${depID}`,
-		deleteDepartmentURL: (depID: number): string =>
-			`${this.routeAceessName.depServiceBaseURL}/${depID}`,
+			${parentDepartmentId}&filter[usersIds]=${userIds}/`,
+		createDepartmentURL: (): string => `${this.routeAceessName.BaseURL}/`,
+		getDepartmentByIdURL: (id: string): string =>
+			`${this.routeAceessName.BaseURL}/${id}/`,
+		updateDepartmentURL: (id: string): string =>
+			`${this.routeAceessName.BaseURL}/${id}/`,
+		deleteDepartmentURL: (id: string): string =>
+			`${this.routeAceessName.BaseURL}/${id}/`,
+		updateDepartmentRolesByIdURL: (id: string): string =>
+			`${this.routeAceessName.BaseURL}/${id}/updateRoles/`,
 	};
 
 	/**
@@ -52,7 +53,7 @@ export class Departments {
 		parentDepartmentId: string,
 		userIds: string,
 	) {
-		return this.httpClient.get<Department>(
+		return this.httpClient.get<Department[]>(
 			`${this.routeAceessName.getDepartmentsURL(
 				page,
 				list,
@@ -68,49 +69,59 @@ export class Departments {
 	 * Create department
 	 * @returns
 	 */
-	createDepartment(name: string, description: string, headId: string) {
+	createDepartment(
+		name: string,
+		description: string,
+		headId: string,
+		parentDepartmentId: string,
+		userIds: string[],
+	) {
 		return this.httpClient.post<Department>(
 			`${this.routeAceessName.createDepartmentURL()}`,
 			{
 				name,
 				description,
 				headId,
+				parentDepartmentId,
+				userIds,
 			},
 		);
 	}
 
 	/**
 	 * Get department by id
-	 * @param depID department id
+	 * @param id department id
 	 * @returns departament by id
 	 */
-	getDepartmentById(depID: number) {
+	getDepartmentById(id: string) {
 		return this.httpClient.get<Department>(
-			`${this.routeAceessName.getDepartmentByIdURL(depID)}`,
+			`${this.routeAceessName.getDepartmentByIdURL(id)}`,
 		);
 	}
 
 	/**
 	 * Update department data (set head department, move users, set parent department)
-	 * @param depID department ID
+	 * @param id department ID
 	 * @param name name of department
 	 * @param headId head id
 	 * @param parentDepartmentId id of parent department
 	 * @param userIds id of member this dep
 	 * @returns updated department data
 	 */
-	updateDepatment(
-		depID: number,
+	updateDepartment(
+		id: string,
 		name: string,
 		headId: string,
+		description: string,
 		parentDepartmentId: string,
 		usersIds: string,
 	) {
-		return this.httpClient.patch<DepartmentPatch>(
-			`${this.routeAceessName.updateDepartmentURL(depID)}`,
+		return this.httpClient.patch<Department>(
+			`${this.routeAceessName.updateDepartmentURL(id)}`,
 			{
 				name,
 				headId,
+				description,
 				parentDepartmentId,
 				usersIds,
 			},
@@ -119,23 +130,36 @@ export class Departments {
 
 	/**
 	 * Delete department.
-	 * @param depID departament ID
+	 * @param id departament ID
 	 * @returns
 	 */
-	deleteDepartment(depID: number) {
-		return this.httpClient.delete<DepartmentPatch>(
-			`${this.routeAceessName.deleteDepartmentURL(depID)}`,
+	deleteDepartment(id: string) {
+		return this.httpClient.delete<Department>(
+			`${this.routeAceessName.deleteDepartmentURL(id)}`,
+		);
+	}
+
+	/**
+	 * Update department roles by id
+	 * @param id departament ID
+	 * @param roles roles
+	 * @returns
+	 */
+	updateDepartmentRolesById(id: string, roles: string[]) {
+		return this.httpClient.patch<Department>(
+			`${this.routeAceessName.updateDepartmentRolesByIdURL(id)}`,
+			{
+				roles,
+			},
 		);
 	}
 }
 
-export interface DepartmentPatch {
-	names: string;
-	headIds: string;
-	parentDepartmentIds: string;
-	usersIds: [];
-}
-
-export interface Department extends DepartmentPatch {
+export interface Department {
 	id: string;
+	name: string;
+	headId: string;
+	parentDepartmentId: string;
+	usersIds: string[];
+	roles: string[];
 }
